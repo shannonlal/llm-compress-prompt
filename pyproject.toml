@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "llm-compress-prompt"
+name = "llmpromptcompressor"
 version = "0.1.0"
 description = "A Python Library used by LLM for Compressing Prompts"
 authors = ["Shannon Lal <shannonlal@hotmail.com>"]
@@ -11,6 +11,7 @@ python = "3.10.13"
 python-dotenv = "^1.0.1"
 asyncio = "^3.4.3"
 aiohttp = "^3.9.4"
+tiktoken = "^0.6.0"
 
 
 [tool.poetry.group.dev.dependencies]
