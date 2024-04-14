@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Rank Results CLI",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "program": "${workspaceFolder}/scripts/rank_results_cli.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--context", "Paris is the capital of France.", "London is the capital of the United Kingdom.","Baseball is a sport played with a bat and a ball.",
+                "--question", "What is the capital of France?",
+                "--rank_method", "OPEN_AI",
+                "--concurrent","1",
+            ]
+        },
+        {
+            "name": "Python: Get Control Context Budget CLI",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "program": "${workspaceFolder}/scripts/control_context_budget_cli.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--context", "Paris is the capital of France.", "London is the capital of the United Kingdom.","Baseball is a sport played with a bat and a ball.",
+                "--question", "What is the capital of France?",
+                "--rank_method", "OPEN_AI",
+                "--concurrent","1",
+                "--target_token","50"
+            ]
+        }
+    ]
+}
