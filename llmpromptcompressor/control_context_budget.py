@@ -38,8 +38,8 @@ async def control_context_budget(
     """
     context_idxs = []
     context_ranked = await get_rank_results(
-            context,
-            question,
+        context,
+        question,
         llm_type,
         concurrent,
         llm_api_config
