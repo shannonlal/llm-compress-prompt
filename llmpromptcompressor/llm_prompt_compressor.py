@@ -1,4 +1,6 @@
 from typing import List
+
+from llmpromptcompressor.constants import RankMethodType
 from .token import get_token_length
 from .control_context_budget import control_context_budget
 from .control_sentence_budget import control_sentence_budget
@@ -41,16 +43,16 @@ class LLMPromptCompressor:
         self.llm_api_config = llm_api_config
 
 
-    def compress_prompt(
+    async def compress_prompt(
         self,
         context: List[str],
+        question: str,
         instruction: str = "",
-        question: str = "",
-        rate: float = 0.5,
         target_token: float = -1,
+        rate: float = 0.5,
         use_sentence_level_filter: bool = False,
         use_context_level_filter: bool = True,
-        use_token_level_filter: bool = True,
+        use_token_level_filter: bool = False,
         concate_question: bool = True,
     ):
         """
@@ -58,8 +60,8 @@ class LLMPromptCompressor:
 
         Args:
             context (List[str]): List of context strings that form the basis of the prompt.
-            instruction (str, optional): Additional instruction text to be included in the prompt. Default is an empty string.
             question (str, optional): A specific question that the prompt is addressing. Default is an empty string.
+            instruction (str, optional): Additional instruction text to be included in the prompt. Default is an empty string.
             rate (float, optional): The maximum compression rate target to be achieved. The compression rate is defined
                 the same as in paper "Language Modeling Is Compression". Delétang, Grégoire, Anian Ruoss, Paul-Ambroise Duquenne,
                 Elliot Catt, Tim Genewein, Christopher Mattern, Jordi Grau-Moya et al. "Language modeling is compression."
@@ -90,12 +92,10 @@ class LLMPromptCompressor:
         ), "Error: 'rate' must not exceed 1.0. The value of 'rate' indicates compression rate and must be within the range [0, 1]."
 
 
-        origin_tokens = get_token_length("\n\n".join([instruction] + context + [question]).strip())
+        origin_tokens = get_token_length(self.rank_method, "\n\n".join([instruction] + context + [question]).strip())
 
-        context_tokens_length = [get_token_length(c) for c in context]
-        instruction_tokens_length, question_tokens_length = get_token_length(
-            instruction
-        ), get_token_length(question)
+        context_tokens_length = [get_token_length(self.rank_method, c) for c in context]
+        instruction_tokens_length, question_tokens_length = get_token_length(self.rank_method, instruction), get_token_length(self.rank_method, question)
         if target_token == -1:
             target_token = (
                 (
@@ -109,8 +109,13 @@ class LLMPromptCompressor:
             )
 
         if len(context) > 1 and use_context_level_filter:
-            context, dynamic_ratio, context_used = control_context_budget(
-                context,
+            context, dynamic_ratio, context_used = await control_context_budget(
+                context=context,
+                context_tokens_length=context_tokens_length,
+                target_token=target_token,
+                llm_type=self.rank_method,
+                llm_api_config=self.llm_api_config,
+                question=question,
             )
 
 
@@ -118,6 +123,7 @@ class LLMPromptCompressor:
             context, segments_info = control_sentence_budget(
                 context,
                 target_token,
+                self.rank_method
             )
 
         compressed_prompt = "\n\n".join(context)
@@ -132,7 +138,7 @@ class LLMPromptCompressor:
 
         compressed_prompt = "\n\n".join(res)
 
-        compressed_tokens = get_token_length(compressed_prompt)
+        compressed_tokens = get_token_length(self.rank_method, compressed_prompt)
         saving = (origin_tokens - compressed_tokens) * 0.06 / 1000
         ratio = 1 if compressed_tokens == 0 else origin_tokens / compressed_tokens
         rate = 1 / ratio
