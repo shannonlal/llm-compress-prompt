@@ -116,6 +116,7 @@ class LLMPromptCompressor:
                 llm_type=self.rank_method,
                 llm_api_config=self.llm_api_config,
                 question=question,
+                concurrent=self.concurrent_requests,
             )
 
 

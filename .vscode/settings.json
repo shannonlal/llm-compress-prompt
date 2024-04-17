@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./lost-in-the-middle/src"
+    ]
+}
