@@ -7,3 +7,6 @@
 #Python Build files
 __pycache__
 *.pyc
+
+# Lost in the middle
+lost-in-the-middle/

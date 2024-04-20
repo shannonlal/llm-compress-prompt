@@ -50,6 +50,15 @@
                 "--concurrent","1",
                 "--target_token","50"
             ]
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
         }
     ]
 }

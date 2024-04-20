@@ -11,5 +11,17 @@ python -m venv .venv
 ```bash
 source .venv/bin/activate
 ```
-- Install the requirements:
+
+# Installation
+
+## Install Poetry
+
+```
+pipx install poetry
+```
+
+
+## Install Dependencies
+```
+poetry install
 ```
