@@ -1,35 +1,8 @@
 import json
-from xopen import xopen
-from copy import deepcopy
-from tqdm import tqdm
-
 import tiktoken
 import time
 from llmpromptcompressor import LLMPromptCompressor, settings, RankMethodType
 import asyncio
-
-def load_data(path, num_examples=100):
-    datasets = []
-    with xopen(path) as f:
-        for ii, jj in tqdm(enumerate(f), total=num_examples):
-            if ii >= num_examples:
-                break
-            input_example = json.loads(jj)
-            question = input_example["question"]
-            documents = []
-            for ctx in deepcopy(input_example["ctxs"]):
-                documents.append(Document.from_dict(ctx))
-            prompt = get_qa_prompt(
-                question,
-                documents,
-                mention_random_ordering=False,
-                query_aware_contextualization=False,
-            )
-            c = prompt.split("\n\n")
-            instruction, question = c[0], c[-1]
-            demonstration = "\n".join(c[1:-1])
-            datasets.append({"id": ii, "instruction": instruction, "demonstration": demonstration, "question": question, "answer": input_example["answers"]})
-    return datasets
 
 
 def get_original_prompt(dataset):
