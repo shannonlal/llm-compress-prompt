@@ -19,6 +19,7 @@ pydantic = "1.10.15"
 rank-bm25 = "^0.2.2"
 nltk = "^3.8.1"
 torch = "2.0.1"
+anthropic = "^0.25.6"
 
 
 [tool.poetry.group.dev.dependencies]
