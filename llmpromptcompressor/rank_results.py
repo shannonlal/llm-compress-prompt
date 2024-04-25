@@ -83,6 +83,15 @@ async def get_rank_results(
 
         return idx
 
+    ## Validation
+    if not context:
+        raise ValueError("Context cannot be empty")
+    if not question:
+        raise ValueError("Question cannot be empty")
+    if rank_method_type not in RankMethodType:
+        rank_method_type = RankMethodType.OPEN_AI
+    
+    ## Rank Method
     method = None
     if rank_method_type == RankMethodType.OPEN_AI:
         method = get_distance_openai

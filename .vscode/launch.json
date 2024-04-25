@@ -15,7 +15,7 @@
             "args": [
                 "--context", "Paris is the capital of France.", "London is the capital of the United Kingdom.","Baseball is a sport played with a bat and a ball.",
                 "--question", "What is the capital of France?",
-                "--rank_method", "OPEN_AI",
+                "--rank_method", "BM25",
                 "--concurrent","1",
             ]
         },
