@@ -1,4 +1,4 @@
-from llmpromptcompressor import LLMPromptCompressor, settings, RankMethodType
+from llmcontextcompressor import LLMPromptCompressor, settings, RankMethodType
 import json
 import tiktoken
 

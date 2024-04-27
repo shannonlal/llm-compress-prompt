@@ -11,3 +11,6 @@ __pycache__
 # Lost in the middle
 lost-in-the-middle/
 examples/*.jsonl
+
+.coverage
+examples/*.jsonl

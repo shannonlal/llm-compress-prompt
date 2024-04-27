@@ -1,5 +1,5 @@
 import pytest
-from  llmpromptcompressor import get_token_length, RankMethodType
+from  llmcontextcompressor import get_token_length, RankMethodType
 
 def test_unsupported_llm():
     with pytest.raises(NotImplementedError, match="Model not supported"):

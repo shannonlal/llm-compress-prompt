@@ -1,7 +1,7 @@
 import pytest
-from llmpromptcompressor.config import settings
-from llmpromptcompressor.constants import RankMethodType
-from llmpromptcompressor.control_context_budget import control_context_budget
+from llmcontextcompressor.config import settings
+from llmcontextcompressor.constants import RankMethodType
+from llmcontextcompressor.control_context_budget import control_context_budget
 
 
 @pytest.mark.asyncio
