@@ -1,5 +1,5 @@
 import pytest
-from  llmpromptcompressor import get_token_length
+from  llmpromptcompressor import get_token_length, RankMethodType
 
 def test_unsupported_llm():
     with pytest.raises(NotImplementedError, match="Model not supported"):
@@ -14,4 +14,4 @@ def test_empty_prompt():
 def test_valid_prompt():
     prompt = "This is a sample prompt."
     expected_token_length = 6  # Assuming the prompt has 6 tokens
-    assert get_token_length("OPEN_AI", prompt) == expected_token_length
+    assert get_token_length(RankMethodType.OPEN_AI, prompt) == expected_token_length

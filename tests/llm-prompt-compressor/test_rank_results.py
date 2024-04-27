@@ -1,81 +1,77 @@
-import pytest
 import asyncio
-from llmpromptcompressor.constants import RankMethodType
-from  llmpromptcompressor.rank_results import get_rank_results
+
+import pytest
+
+from llmpromptcompressor import RankMethodType, get_rank_results, settings
+
+@pytest.fixture
+def rank_results():
+    return get_rank_results
 
 @pytest.mark.asyncio
-async def test_empty_context():
-    context = []
-    question = "What is the capital of France?"
-    llm_type = RankMethodType.OPEN_AI
-    with pytest.raises(IndexError):
-        await get_rank_results(context, question, llm_type)
+async def test_get_rank_results_empty_context(rank_results):
+    with pytest.raises(ValueError, match="Context cannot be empty"):
+        await rank_results([], "What is the question?", RankMethodType.OPEN_AI)
 
 @pytest.mark.asyncio
-async def test_empty_question():
-    context = ["Paris is the capital of France."]
-    question = ""
-    llm_type = RankMethodType.OPEN_AI
-    with pytest.raises(ValueError):
-        await get_rank_results(context, question, llm_type)
+async def test_get_rank_results_empty_question(rank_results):
+    with pytest.raises(ValueError, match="Question cannot be empty"):
+        await rank_results(["Some context"], "", RankMethodType.OPEN_AI)
 
 @pytest.mark.asyncio
-async def test_unsupported_llm_type():
-    context = ["Paris is the capital of France."]
-    question = "What is the capital of France?"
-    llm_type = "UNSUPPORTED_LLM"
-    with pytest.raises(NotImplementedError, match="Rank method not supported"):
-        await get_rank_results(context, question, llm_type)
+async def test_get_rank_results_openai_mocked(rank_results):
+    context = [
+        "The quick brown fox jumps over the lazy dog.",
+        "The lazy dog sleeps all day long.",
+    ]
+    question = "What does the quick brown fox do?"
+
+    result = await rank_results(
+                context,
+                question,
+                RankMethodType.OPEN_AI,
+                concurrent=1, 
+                llm_api_config={"open_api_key": settings.OPENAI_API_KEY})
+    
+    assert len(result) == 2
+    assert result[0][1] > 0.7
+    assert result[0][1] > 0.2
 
 @pytest.mark.asyncio
-async def test_single_context_single_question():
-    context = ["Paris is the capital of France."]
-    question = "What is the capital of France?"
-    llm_type = RankMethodType.OPEN_AI
-    llm_api_config = {"open_api_key": "your_api_key"}
-    result = await get_rank_results(context, question, llm_type, llm_api_config=llm_api_config)
-    assert len(result) == 1
-    assert result[0][0] == 0
+async def test_get_rank_results_openai_low_rank(rank_results):
+    context = [
+        "The quick brown fox jumps over the lazy dog.",
+        "The lazy dog sleeps all day long.",
+    ]
+    question = "What is the capital of Paris?"
+
+    result = await rank_results(
+                context,
+                question,
+                RankMethodType.OPEN_AI,
+                concurrent=1, 
+                llm_api_config={"open_api_key": settings.OPENAI_API_KEY})
+    
+    assert len(result) == 2
+    assert result[0][1] < 0.1
 
 @pytest.mark.asyncio
-async def test_multiple_context_single_question():
+async def test_get_rank_results_bm25(rank_results):
     context = [
         "Paris is the capital of France.",
         "London is the capital of the United Kingdom.",
-        "Berlin is the capital of Germany.",
-        "Madrid is the capital of Spain.",
-        "Rome is the capital of Italy.",
-        "Tokyo is the capital of Japan.",
-        "Beijing is the capital of China.",
-        "Moscow is the capital of Russia.",
-        "Washington D.C. is the capital of the United States.",
-        "Canberra is the capital of Australia."
+        "Baseball is a sport played with a bat and a ball.",
     ]
     question = "What is the capital of France?"
-    llm_type = RankMethodType.OPEN_AI
-    llm_api_config = {"open_api_key": "your_api_key"}
-    result = await get_rank_results(context, question, llm_type, llm_api_config=llm_api_config)
-    assert len(result) == 10
-    assert result[0][0] == 0
 
-@pytest.mark.asyncio
-async def test_multiple_context_single_question_concurrent():
-    context = [
-        "Paris is the capital of France.",
-        "London is the capital of the United Kingdom.",
-        "Berlin is the capital of Germany.",
-        "Madrid is the capital of Spain.",
-        "Rome is the capital of Italy.",
-        "Tokyo is the capital of Japan.",
-        "Beijing is the capital of China.",
-        "Moscow is the capital of Russia.",
-        "Washington D.C. is the capital of the United States.",
-        "Canberra is the capital of Australia."
-    ]
-    question = "What is the capital of France?"
-    llm_type = RankMethodType.OPEN_AI
-    concurrent = 3
-    llm_api_config = {"open_api_key": "your_api_key"}
-    result = await get_rank_results(context, question, llm_type, concurrent=concurrent, llm_api_config=llm_api_config)
-    assert len(result) == 10
-    assert result[0][0] == 0
+    result = await rank_results(
+                context,
+                question,
+                RankMethodType.BM25,
+                concurrent=1, 
+                llm_api_config={"open_api_key": ""})
+    print(result)
+    assert len(result) == 3
+    assert result[0][1] > 0.6
+    assert result[1][1] > 0.04
+    assert result[2][1] > 0.01

@@ -18,12 +18,14 @@ async def main(args):
     llm_api_config = {"open_api_key": settings.OPENAI_API_KEY}
 
     try:        
-        prompt_context_compressor = LLMPromptCompressor(rank_method=rank_method_type, concurrent_requests=1, llm_api_config=llm_api_config)
+        prompt_context_compressor = LLMPromptCompressor(rank_method=rank_method_type, concurrent_requests=concurrent, llm_api_config=llm_api_config)
 
+        original_tokens = sum(get_token_length(rank_method_type, c) for c in context)
         response = await prompt_context_compressor.compress_prompt(
             context=context,
             question=question,
-            target_token=target_token)
+            target_token=int(original_tokens * 0.5)
+        )
         print(f"Compressed Prompt: {response}")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
