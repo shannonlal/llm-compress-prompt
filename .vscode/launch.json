@@ -44,7 +44,7 @@
             "program": "${workspaceFolder}/scripts/prompt_context_compressor_cli.py",
             "console": "integratedTerminal",
             "args": [
-                "--context", "Paris is the capital of France.", "London is the capital of the United Kingdom.","Baseball is a sport played with a bat and a ball.",
+                "--context", "Paris is the capital of France.", "London is the capital of the United Kingdom.","Baseball is a sport played with a bat and a ball.","The sky is blue.","The grass is green.","The sun is shining.","The moon is bright","A long sentence that is not very informative.","A short sentence that is very informative.",
                 "--question", "What is the capital of France?",
                 "--rank_method", "OPEN_AI",
                 "--concurrent","1",

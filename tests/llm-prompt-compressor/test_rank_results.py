@@ -1,7 +1,5 @@
 import asyncio
-from unittest.mock import AsyncMock, patch
 
-import aiohttp
 import pytest
 
 from llmpromptcompressor import RankMethodType, get_rank_results, settings
