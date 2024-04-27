@@ -1,7 +1,7 @@
 import json
 import tiktoken
 import time
-from llmpromptcompressor import LLMPromptCompressor, settings, RankMethodType
+from llmcontextcompressor import LLMPromptCompressor, settings, RankMethodType
 import asyncio
 
 

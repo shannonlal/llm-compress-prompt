@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from llmpromptcompressor import RankMethodType, get_rank_results, settings
+from llmcontextcompressor import RankMethodType, get_rank_results, settings
 
 @pytest.fixture
 def rank_results():

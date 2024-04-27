@@ -5,7 +5,7 @@ The following is a command line script used to run the rank results function fro
 import asyncio
 import argparse
 from typing import List
-from llmpromptcompressor import RankMethodType, control_context_budget, settings, get_token_length
+from llmcontextcompressor import RankMethodType, control_context_budget, settings, get_token_length
 
 
 async def main(args):
