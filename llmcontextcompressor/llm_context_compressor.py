@@ -5,7 +5,7 @@ from .token import get_token_length
 from .control_context_budget import control_context_budget
 from .control_sentence_budget import control_sentence_budget
 
-class LLMPromptCompressor:
+class LLMContextCompressor:
     """
     LLMPromptCompressor is designed for compressing prompts based on a given language model.
 

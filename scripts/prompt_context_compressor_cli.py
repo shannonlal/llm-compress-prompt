@@ -6,7 +6,7 @@ import asyncio
 import argparse
 from typing import List
 from llmcontextcompressor import RankMethodType, settings, get_token_length
-from llmcontextcompressor.llm_prompt_compressor import LLMPromptCompressor
+from llmcontextcompressor.llm_context_compressor import LLMContextCompressor
 
 
 async def main(args):
@@ -18,7 +18,7 @@ async def main(args):
     llm_api_config = {"open_api_key": settings.OPENAI_API_KEY}
 
     try:        
-        prompt_context_compressor = LLMPromptCompressor(rank_method=rank_method_type, concurrent_requests=concurrent, llm_api_config=llm_api_config)
+        prompt_context_compressor = LLMContextCompressor(rank_method=rank_method_type, concurrent_requests=concurrent, llm_api_config=llm_api_config)
 
         original_tokens = sum(get_token_length(rank_method_type, c) for c in context)
         response = await prompt_context_compressor.compress_prompt(

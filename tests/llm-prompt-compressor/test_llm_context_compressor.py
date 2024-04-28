@@ -1,7 +1,7 @@
 import pytest
 from llmcontextcompressor.config import settings
 from llmcontextcompressor.constants import RankMethodType
-from llmcontextcompressor.llm_prompt_compressor import LLMPromptCompressor
+from llmcontextcompressor.llm_context_compressor import LLMContextCompressor
 
 @pytest.mark.asyncio
 async def test_llm_prompt_compressor():
@@ -23,7 +23,7 @@ async def test_llm_prompt_compressor():
     target_token = 100
 
     # Initialize the LLMPromptCompressor
-    compress_method = LLMPromptCompressor(
+    compress_method = LLMContextCompressor(
         rank_method=RankMethodType.OPEN_AI,
         concurrent_requests=1,
         llm_api_config={"open_api_key": settings.OPENAI_API_KEY},

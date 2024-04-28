@@ -2,7 +2,7 @@ import asyncio
 import json
 import tiktoken
 import time
-from llmcontextcompressor import LLMPromptCompressor, settings, RankMethodType
+from llmcontextcompressor import LLMContextCompressor, settings, RankMethodType
 
 from evaluation_utils import  compare_prompts, compare_responses
 from prompt_format import get_original_prompt, process_jsonl_file,compress_prompt

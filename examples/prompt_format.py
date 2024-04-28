@@ -1,4 +1,4 @@
-from llmcontextcompressor import LLMPromptCompressor, settings, RankMethodType
+from llmcontextcompressor import LLMContextCompressor, settings, RankMethodType
 import json
 import tiktoken
 
@@ -12,7 +12,7 @@ def get_original_prompt(dataset):
 async def compress_prompt(dataset, target_token):
     demonstration_str, question, answer = [dataset[key] for key in ["demonstration", "question", "answer"]]
 
-    context_compressor = LLMPromptCompressor( rank_method=RankMethodType.OPEN_AI, concurrent_requests=20, llm_api_config={"open_api_key": settings.OPENAI_API_KEY})
+    context_compressor = LLMContextCompressor( rank_method=RankMethodType.OPEN_AI, concurrent_requests=20, llm_api_config={"open_api_key": settings.OPENAI_API_KEY})
     compressed_prompt = await context_compressor.compress_prompt(
         demonstration_str.split("\n"),
         question=question,
